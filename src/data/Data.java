@@ -14,7 +14,9 @@ import database.DatabaseConnectionException;
 import database.DbAccess;
 import database.EmptyTypeException;
 import database.Example;
+import database.QUERY_TYPE;
 import database.TableData;
+import database.TableSchema;
 
 //import data.Data.Example;
 /**
@@ -55,14 +57,17 @@ public class Data {
 			c = x.getConnection();
 			try {
 				TableData x3 = new TableData(x);
-				@SuppressWarnings("rawtypes")
-				List lista = x3.getDistinctTransazioni(tabella);
+				List<Example> lista = x3.getDistinctTransazioni(tabella);
+				System.out.println("lista->"+lista.size());
 				for (int i = 0; i < lista.size(); i++) {
 					Example ex = new Example();
 					ex = (Example) lista.get(i);
 					tempdata.add(ex);
+					//System.out.println("tempdata->"+tempdata+"  example->"+ex);
 				}
-				c.close();
+				//System.out.println("tempdata->"+tempdata.size());
+				//System.out.println(tempdata);
+				//c.close();
 			} catch (SQLException | EmptyTypeException e) {
 				e.printStackTrace();
 			}
@@ -72,8 +77,37 @@ public class Data {
 		}
 
 		data = new ArrayList<Example>(tempdata);
+		System.out.println("matteo");
 		numberOfExamples = data.size();
+		TableSchema schema;
+		try {
+			TableData x3 = new TableData(x);
+			attributeSet = new LinkedList<Attribute>();
+			schema = new TableSchema(x,tabella);
+			for(int i=0;i<schema.getNumberOfAttributes();i++) {
+			Set<Object> colonna=x3.getDistinctColumnValues(tabella, schema.getColumn(i));
+			System.out.println(colonna);
+				if(!schema.getColumn(i).isNumber()) {
+					TreeSet<String> value=new TreeSet<String>();
+					Iterator it= colonna.iterator();
+					while (it.hasNext()) {
+						value.add((String)it.next());
+					}
+					attributeSet.add(new DiscreteAttribute(schema.getColumn(i).getColumnName(),i,value));
+					System.out.println(value);
+				}else {
+					attributeSet.add(new ContinuousAttribute(schema.getColumn(i).getColumnName(),i,12.5,25.6));
+					
+				}
+			}
+		} catch (SQLException e) {
+			// TODO Auto-generated catch block
+			e.printStackTrace();
+		}
+		
+		
 		// explanatory Set
+		/*
 		attributeSet = new LinkedList<Attribute>();
 		TreeSet<String> outLookValues = new TreeSet<String>();
 		outLookValues.add("Overcast");
@@ -99,7 +133,7 @@ public class Data {
 		playtennis.add("Yes");
 		playtennis.add("No");
 		attributeSet.add(new DiscreteAttribute("Playtennis", 4, playtennis));
-
+*/
 	}
 
 	/*

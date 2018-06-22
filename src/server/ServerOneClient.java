@@ -66,10 +66,12 @@ public class ServerOneClient extends Thread {
 					data= new Data(nometab);
 					kmeans = new KMeansMiner(ncluster);
 					try {
+		//TOGLIERE
 						int numIter = kmeans.kmeans(data);
 						out.writeObject("OK");
 						out.writeObject(kmeans.getC().toString(data));
 					} catch (OutOfRangeSampleSize e) {
+						e.printStackTrace();
 						out.writeObject("Il numero di cluster è troppo elevato!!!!! Prova con un numero più basso");
 					}
 					kmeans.salva(nometab+".dmp");

@@ -43,9 +43,9 @@ public class TableSchema {
 		mapSQL_JAVATypes.put("BIT","string");
 		mapSQL_JAVATypes.put("SHORT","number");
 		mapSQL_JAVATypes.put("INT","number");
-		mapSQL_JAVATypes.put("LONG","number");
-		mapSQL_JAVATypes.put("FLOAT","number");
-		mapSQL_JAVATypes.put("DOUBLE","number");
+		mapSQL_JAVATypes.put("LONG","Double");
+		mapSQL_JAVATypes.put("FLOAT","Double");
+		mapSQL_JAVATypes.put("DOUBLE","Double");
 		
 		
 	
