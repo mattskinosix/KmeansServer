@@ -59,7 +59,6 @@ public abstract class Item implements Serializable {
 	 */
 	public String toString() {
 		return value.toString();
-
 	}
 
 	/**

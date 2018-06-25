@@ -34,26 +34,18 @@ public class TableData {
 	 */
 	public List<Example> getDistinctTransazioni(String table) throws SQLException, EmptyTypeException {
 		List<Example> out = new ArrayList<Example>();
-
+		Example ex;
 		Statement s = db.getConnection().createStatement();
 		ResultSet ris = s.executeQuery("SELECT * FROM " + table);
-
-		TableSchema schema = new TableSchema(db, table);
-		int j = 0;
 		while (ris.next()) {
-			Example ex = new Example();
-			for (int i = 1; i <= schema.getNumberOfAttributes(); i++) {
-				//System.out.println(ris.getObject(i).toString());
-				ex.add(ris.getObject(i));
-			}
-			out.add(j, ex);
-			j++;
-			/*
-			 * for(int i=1;i<=schema.getNumberOfAttributes();i++) {
-			 * ex.add(ris.getObject(i)); } out.add(ex); System.out.println("out->"+out);
-			 */
+			ex = new Example();
+			ex.add(ris.getString(1));
+			ex.add(ris.getDouble(2));
+			ex.add(ris.getString(3));
+			ex.add(ris.getString(4));
+			ex.add(ris.getString(5));
+			out.add(ex);
 		}
-
 		s.close();
 		return out;
 	}
@@ -64,25 +56,25 @@ public class TableData {
 	 * opportunamente in Set da utilizzare).
 	 */
 	public Set<Object> getDistinctColumnValues(String table, Column column) throws SQLException {
-		Set<Object> set = new TreeSet<Object>();
+		Set<Object> set = new TreeSet<Object>(); // aggiungere comparator??
 		Statement s = db.getConnection().createStatement();
-		ResultSet ris = s.executeQuery("SELECT " + column.getColumnName() + " FROM " + table);
+		ResultSet ris = s.executeQuery("SELECT " + column.getColumnName() + " FROM " + table); 
 		while (ris.next()) {
-			set.add(ris.getObject(column.getColumnName()));
-//			if (column.isNumber()) {
-//				set.add(ris.getDouble(column.getColumnName()));
-//			} else {
-//				set.add(ris.getString(column.getColumnName()));
-//			}
+			if (column.isNumber()) {
+				set.add(ris.getDouble(column.getColumnName()));
+			} else {
+				set.add(ris.getString(column.getColumnName()));
+			}
 		}
 		s.close();
+		System.out.println(set);
 		return set;
 	}
 
 	/*
-	 * FUNZIONANTE Formula ed esegue una interrogazione SQL per estrarre il valore
-	 * aggregato (valore minimo o valore massimo) cercato nella colonna di nome
-	 * column della tabella di nome table. Il metodo solleva e propaga una
+	 * FUNZIONANTE Formula ed esegue una interrogazione SQL per estrarre il
+	 * valore aggregato (valore minimo o valore massimo) cercato nella colonna di
+	 * nome column della tabella di nome table. Il metodo solleva e propaga una
 	 * NoValueException se il resultset è vuoto o il valore calcolato è pari a null
 	 */
 	public Object getAggregateColumnValue(String table, Column column, QUERY_TYPE aggregate) {
@@ -90,7 +82,7 @@ public class TableData {
 		Statement s;
 		try {
 			s = db.getConnection().createStatement();
-			ris = s.executeQuery("SELECT " + aggregate + "(" + column.getColumnName() + ") FROM " + table);
+			ris = s.executeQuery("SELECT" + aggregate + "(" + column.getColumnName() + ") FROM " + table);
 			if (ris.next()) {
 				return ris.getObject(1);
 			}

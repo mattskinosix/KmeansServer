@@ -69,6 +69,7 @@ public class Cluster implements Serializable {
 	}
 
 	public String toString() {
+		System.out.println("aaa");
 		String str = "Centroid=(";
 		for (int i = 0; i < centroid.getLength(); i++)
 			str += centroid.get(i);
