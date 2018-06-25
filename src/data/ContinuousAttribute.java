@@ -6,7 +6,7 @@ package data;
  *         attributo continuo(numerico). Tale classe include i metodi per la
  *         "normalizzazione" del dominio dell'attributo nell'intervallo [0,1] al
  *         fine da rendere confrontabili attributi aventi domini diversi.
- *
+ *MODIFICATO AGGIUNTO FLOAT
  */
 class ContinuousAttribute extends Attribute {
 	/**
@@ -37,12 +37,22 @@ class ContinuousAttribute extends Attribute {
 	 * @param max
 	 *            Valore massimo del dominio di valori che può assumere l'attributo.
 	 */
-	public ContinuousAttribute(String name, int index, double min, double max) {
+	public ContinuousAttribute(String name, int index, Double min, Double max) {
 		super(name, index);
 		this.max = max;
 		this.min = min;
 	}
 
+	public ContinuousAttribute(String name, int index, Integer min, Integer max) {
+		super(name, index);
+		this.max = max;
+		this.min = min;
+	}
+	public ContinuousAttribute(String name, int index, float min, float max) {
+		super(name, index);
+		this.max = max;
+		this.min = min;
+	}
 	/**
 	 * Calcola e restituisce il valore normalizzato del parametro passato in input.
 	 * La normalizzazione ha come codominio l'intervallo [0,1].
@@ -51,9 +61,18 @@ class ContinuousAttribute extends Attribute {
 	 *            Valore dell'attributo da normalizzare.
 	 * @return Restituisce il valore normalizzato.
 	 */
-	public double getScaledValue(double v) {
+	public Float getScaledValue(Float v) {
+		double v1 =  ((v - min) / (max - min));
+		return (float)v1;
+	}
+	public double getScaledValue(Double v) {
 		double v1 = (v - min) / (max - min);
 		return v1;
+	}
+	
+	public Integer getScaledValue(Integer v) {
+		double v1 = ((v - min) / (max - min));
+		return (int)v1;
 	}
 
 }

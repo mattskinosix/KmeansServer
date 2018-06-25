@@ -60,9 +60,6 @@ public class ServerOneClient extends Thread {
 					break;
 				case 1:
 					int ncluster = (int) in.readObject();
-					System.out.println(ncluster);
-					System.out.println(nometab);
-
 					data= new Data(nometab);
 					kmeans = new KMeansMiner(ncluster);
 					try {
@@ -77,8 +74,8 @@ public class ServerOneClient extends Thread {
 					kmeans.salva(nometab+".dmp");
 					break;
 				case 2:
-					String nomefile=nometab+".txt";
-					kmeans.salva(nomefile);
+					String nomefile=nometab;
+					kmeans.salva(nomefile+".dmp");
 					out.writeObject("OK");
 					break;
 				case 3:

@@ -23,7 +23,6 @@ public class MultiServer{
 				System.out.println("Connessione avvenuta");
 				try {
 					new ServerOneClient(socket);
-					System.out.println("dopo");
 				} catch (IOException e) {
 					socket.close();
 				}
