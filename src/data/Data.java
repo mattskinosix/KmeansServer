@@ -70,7 +70,7 @@ public class Data {
 				//System.out.println("tempdata->"+tempdata.size());
 				//System.out.println(tempdata);
 				//c.close();
-			} catch (SQLException   e) {
+			} catch (SQLException  e) {
 				e.getMessage();
 			}
 		} catch (DatabaseConnectionException e) {

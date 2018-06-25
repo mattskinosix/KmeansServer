@@ -8,7 +8,7 @@ import data.*;
 /**
  * Classe che rappresenta un insieme dei cluster.
  * 
- * @author mirko
+ * @author Mirko.
  *
  */
 @SuppressWarnings("serial")
@@ -18,7 +18,8 @@ public class Cluster implements Serializable {
 	 */
 	private Tuple centroid;
 	/**
-	 * 
+	 * Insieme di oggetti della classe Integer il quale riporta le tuple
+	 * clusterizzare in Data.
 	 */
 	private Set<Integer> clusteredData;
 
@@ -33,16 +34,21 @@ public class Cluster implements Serializable {
 		clusteredData = new HashSet<Integer>();
 
 	}
+
 	/**
 	 * Restituisce il centroide.
+	 * 
 	 * @return centroid.
 	 */
 	Tuple getCentroid() {
 		return centroid;
 	}
+
 	/**
-	 * Computa i centroidi per i singoli cl
+	 * Computa i centroidi per ogni singolo cluster.
+	 * 
 	 * @param data
+	 *            Oggetto di tipo Data da cui prelevare gli example.
 	 */
 	void computeCentroid(Data data) {
 		for (int i = 0; i < centroid.getLength(); i++) {
@@ -51,23 +57,46 @@ public class Cluster implements Serializable {
 
 	}
 
-	// return true if the tuple is changing cluster
+	/**
+	 * Restituisce true se la tupla ha cambiato lo stato precedente del cluster.
+	 * 
+	 * @param id
+	 *            Intero, indica la posizione della potenziale tupla da aggiungere.
+	 * @return Valore booleano.
+	 */
 	boolean addData(int id) {
 		return clusteredData.add(id);
 
 	}
 
-	// verifica se una transazione è clusterizzata nell'array corrente
+	/**
+	 * verifica se una transazione è clusterizzata nell'array corrente.
+	 * 
+	 * @param id
+	 *            Indica la transiozione ricercata.
+	 * @return Restituisce true se la transizione e' contenuta in clusteredData,
+	 *         false altrimenti.
+	 */
 	boolean contain(int id) {
 		return clusteredData.contains(id);
 	}
 
-	// remove the tuplethat has changed the cluster
+	/**
+	 * Rimuove la tupla da clusteredData.
+	 * 
+	 * @param id
+	 *            Indice che indica l'indice della tupla da eliminare.
+	 */
+
 	void removeTuple(int id) {
 		clusteredData.remove(id);
 
 	}
 
+	/**
+	 * Sovrascrive metodo ereditato dalla superclasse e restituisce la stringa
+	 * rappresentante lo stato dell'oggetto.
+	 */
 	public String toString() {
 		System.out.println("aaa");
 		String str = "Centroid=(";
@@ -78,6 +107,15 @@ public class Cluster implements Serializable {
 
 	}
 
+	/**
+	 * Sovrascrive metodo ereditato dalla superclasse e restituisce la stringa
+	 * rappresentante lo stato dell'oggetto.
+	 * 
+	 * @param data
+	 *            Oggetto di tipo Data da utilizzare per creare la stringa da
+	 *            restituire.
+	 * @return Restituisce la stringa creata.
+	 */
 	public String toString(Data data) {
 		String str = "Centroid=(";
 		for (int i = 0; i < centroid.getLength(); i++)

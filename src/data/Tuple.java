@@ -13,7 +13,7 @@ public class Tuple implements Serializable {
 	/**
 	 * Array di oggetti di tipo Item.
 	 */
-	Item[] tuple;
+	private Item[] tuple;
 
 	/**
 	 * Costruisce l'oggetto riferito da tuple.

@@ -2,7 +2,7 @@ package data;
 
 public class ContinuousItem extends Item {
 
-	public ContinuousItem(Attribute attribute, Object value) {
+	public ContinuousItem(ContinuousAttribute attribute, Object value) {
 		super(attribute, value);
 
 	}

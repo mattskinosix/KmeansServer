@@ -5,25 +5,50 @@ import java.io.IOException;
 import java.io.ObjectInputStream;
 import java.io.ObjectOutputStream;
 import java.net.Socket;
-import java.sql.Connection;
 import java.sql.SQLException;
 import java.util.List;
-
 import data.Data;
 import data.OutOfRangeSampleSize;
 import database.DatabaseConnectionException;
 import database.DbAccess;
 import database.EmptySetException;
-import database.EmptyTypeException;
 import database.TableData;
 import mining.KMeansMiner;
 
+/**
+ * 
+ * @author Mirko. Classe che estende la classe Thread, e crea un nuovo thread
+ *         per ogni richiesta ricevuta dal client.
+ *
+ */
 public class ServerOneClient extends Thread {
+	/**
+	 * Oggetto di tipo Socket, utile per creare la connessione.
+	 */
 	Socket socket;
+	/**
+	 * Oggetti che indicano dei flussi provenienti dal client.
+	 */
 	ObjectInputStream in;
+	/**
+	 * Oggetti che indicano dei flussi in uscita dal server.
+	 */
 	ObjectOutputStream out;
+	/**
+	 * Oggetto di tipo KMeanMiner utile per rispondere alle richieste.
+	 */
 	KMeansMiner kmeans;
 
+	/**
+	 * Costruttore di classe, inizializza gli attributi socket, in e out ed infine
+	 * avvia il thread.
+	 * 
+	 * @param s
+	 *            Indica la socket.
+	 * @throws IOException
+	 *             Eccezzione sollevata per problemi riscontrati
+	 *             nell'inizializzazione di in e out.
+	 */
 	public ServerOneClient(Socket s) throws IOException {
 		socket = s;
 		in = new ObjectInputStream(s.getInputStream());
@@ -31,6 +56,10 @@ public class ServerOneClient extends Thread {
 		start();
 	}
 
+	/**
+	 * Riscrive il metodo run della superclasse Thread al fine di gestire le
+	 * richieste del client.
+	 */
 	public void run() {
 		String nometab = "";
 		int scelta = 0;
@@ -51,6 +80,7 @@ public class ServerOneClient extends Thread {
 					}
 					TableData newTB = new TableData(accessodb);
 					try {
+						@SuppressWarnings({ "unused", "rawtypes" })
 						List table = newTB.getDistinctTransazioni(nometab);
 						out.writeObject("OK");
 					} catch (SQLException e) {
@@ -70,7 +100,7 @@ public class ServerOneClient extends Thread {
 
 						kmeans = new KMeansMiner(ncluster);
 						try {
-							// TOGLIERE
+							@SuppressWarnings("unused")
 							int numIter = kmeans.kmeans(data);
 							out.writeObject("OK");
 							out.writeObject(kmeans.getC().toString(data));
@@ -80,6 +110,8 @@ public class ServerOneClient extends Thread {
 						}
 					} catch (EmptySetException e) {
 						out.writeObject(e.getMessage());
+					} catch (NegativeArraySizeException e) {
+						out.writeObject("Attenzione, e' possibile inserire solo numeri positivi.");
 					}
 
 					break;
@@ -102,6 +134,8 @@ public class ServerOneClient extends Thread {
 						}
 					} catch (EmptySetException e) {
 						out.writeObject(e.getMessage());
+					} catch (NegativeArraySizeException e) {
+						out.writeObject("Attenzione, e' possibile inserire solo numeri positivi.");
 					}
 					break;
 				}
