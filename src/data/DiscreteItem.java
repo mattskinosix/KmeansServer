@@ -7,6 +7,7 @@ package data;
  * @author mirko
  *
  */
+@SuppressWarnings("serial")
 public class DiscreteItem extends Item {
 	/**
 	 * Invoca il costruttore della classe madre.
