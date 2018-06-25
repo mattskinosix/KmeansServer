@@ -14,9 +14,7 @@ import database.DatabaseConnectionException;
 import database.DbAccess;
 import database.EmptyTypeException;
 import database.Example;
-import database.QUERY_TYPE;
 import database.TableData;
-import database.TableSchema;
 
 //import data.Data.Example;
 /**
@@ -57,17 +55,14 @@ public class Data {
 			c = x.getConnection();
 			try {
 				TableData x3 = new TableData(x);
-				List<Example> lista = x3.getDistinctTransazioni(tabella);
-				// System.out.println("lista->" + lista);
+				@SuppressWarnings("rawtypes")
+				List lista = x3.getDistinctTransazioni(tabella);
 				for (int i = 0; i < lista.size(); i++) {
 					Example ex = new Example();
 					ex = (Example) lista.get(i);
 					tempdata.add(ex);
-//					System.out.println("tempdata->" + tempdata + " example->" + ex);
 				}
-				// System.out.println("tempdata->"+tempdata.size());
-				// System.out.println(tempdata);
-				// c.close();
+				c.close();
 			} catch (SQLException | EmptyTypeException e) {
 				e.printStackTrace();
 			}
@@ -75,68 +70,36 @@ public class Data {
 			e.printStackTrace();
 			return;
 		}
+
 		data = new ArrayList<Example>(tempdata);
-		// System.out.println("matteo");
 		numberOfExamples = data.size();
-		TableSchema schema;
-		try {
-			TableData x3 = new TableData(x);
-			attributeSet = new LinkedList<Attribute>();
-			schema = new TableSchema(x, tabella);
-			for (int i = 0; i < schema.getNumberOfAttributes(); i++) {
-				Set<Object> colonna = x3.getDistinctColumnValues(tabella, schema.getColumn(i));
-//				System.out.println(colonna);
-				if (!schema.getColumn(i).isNumber()) {
-					TreeSet<String> value = new TreeSet<String>();
-					Iterator it = colonna.iterator();
-					while (it.hasNext()) {
-						value.add((String) it.next());
-					}
-					attributeSet.add(new DiscreteAttribute(schema.getColumn(i).getColumnName(), i, value));
-					// System.out.println(value);
-				} else {
-					// System.out.println("capocchia");
-					if (x3.getAggregateColumnValue(tabella, schema.getColumn(i), QUERY_TYPE.MIN) instanceof Double) {
-						attributeSet.add(new ContinuousAttribute(schema.getColumn(i).getColumnName(), i,
-								(Double) x3.getAggregateColumnValue(tabella, schema.getColumn(i), QUERY_TYPE.MIN),
-								(Double) x3.getAggregateColumnValue(tabella, schema.getColumn(i), QUERY_TYPE.MAX)));
-					} else if (x3.getAggregateColumnValue(tabella, schema.getColumn(i),
-							QUERY_TYPE.MIN) instanceof Float) {
-						attributeSet.add(new ContinuousAttribute(schema.getColumn(i).getColumnName(), i,
-								(Float) x3.getAggregateColumnValue(tabella, schema.getColumn(i), QUERY_TYPE.MIN),
-								(Float) x3.getAggregateColumnValue(tabella, schema.getColumn(i), QUERY_TYPE.MAX)));
-					} else if (x3.getAggregateColumnValue(tabella, schema.getColumn(i),
-							QUERY_TYPE.MIN) instanceof Integer) {
-						attributeSet.add(new ContinuousAttribute(schema.getColumn(i).getColumnName(), i,
-								(Integer) x3.getAggregateColumnValue(tabella, schema.getColumn(i), QUERY_TYPE.MIN),
-								(Integer) x3.getAggregateColumnValue(tabella, schema.getColumn(i), QUERY_TYPE.MAX)));
-
-					}
-				}
-			}
-		} catch (SQLException e) {
-			// TODO Auto-generated catch block
-			e.printStackTrace();
-		}
-
 		// explanatory Set
-		/*
-		 * attributeSet = new LinkedList<Attribute>(); TreeSet<String> outLookValues =
-		 * new TreeSet<String>(); outLookValues.add("Overcast");
-		 * outLookValues.add("Rain"); outLookValues.add("Sunny"); attributeSet.add(new
-		 * DiscreteAttribute("Outlook", 0, outLookValues)); TreeSet<String> Temperature
-		 * = new TreeSet<String>(); Temperature.add("Hot"); Temperature.add("Mild");
-		 * Temperature.add("Cool"); // attributeSet.add( new
-		 * DiscreteAttribute("Temperature",1, Temperature)); attributeSet.add(new
-		 * ContinuousAttribute("Temperature", 1, 3.2, 38.7)); TreeSet<String> humidity =
-		 * new TreeSet<String>(); humidity.add("High"); humidity.add("Normal");
-		 * humidity.add("Low"); attributeSet.add(new DiscreteAttribute("Humidity", 2,
-		 * humidity)); TreeSet<String> wind = new TreeSet<String>(); wind.add("Weak");
-		 * wind.add("Strong"); attributeSet.add(new DiscreteAttribute("Wind", 3, wind));
-		 * TreeSet<String> playtennis = new TreeSet<String>(); playtennis.add("Yes");
-		 * playtennis.add("No"); attributeSet.add(new DiscreteAttribute("Playtennis", 4,
-		 * playtennis));
-		 */
+		attributeSet = new LinkedList<Attribute>();
+		TreeSet<String> outLookValues = new TreeSet<String>();
+		outLookValues.add("Overcast");
+		outLookValues.add("Rain");
+		outLookValues.add("Sunny");
+		attributeSet.add(new DiscreteAttribute("Outlook", 0, outLookValues));
+		TreeSet<String> Temperature = new TreeSet<String>();
+		Temperature.add("Hot");
+		Temperature.add("Mild");
+		Temperature.add("Cool");
+		// attributeSet.add( new DiscreteAttribute("Temperature",1, Temperature));
+		attributeSet.add(new ContinuousAttribute("Temperature", 1, 3.2, 38.7));
+		TreeSet<String> humidity = new TreeSet<String>();
+		humidity.add("High");
+		humidity.add("Normal");
+		humidity.add("Low");
+		attributeSet.add(new DiscreteAttribute("Humidity", 2, humidity));
+		TreeSet<String> wind = new TreeSet<String>();
+		wind.add("Weak");
+		wind.add("Strong");
+		attributeSet.add(new DiscreteAttribute("Wind", 3, wind));
+		TreeSet<String> playtennis = new TreeSet<String>();
+		playtennis.add("Yes");
+		playtennis.add("No");
+		attributeSet.add(new DiscreteAttribute("Playtennis", 4, playtennis));
+
 	}
 
 	/*
@@ -296,7 +259,9 @@ public class Data {
 		Tuple tuple = new Tuple(getNumberOfAttributes());
 		for (int i = 0; i < getNumberOfAttributes(); i++) {
 			if (this.getAttribute(i) instanceof ContinuousAttribute)
-				tuple.add(new ContinuousItem((ContinuousAttribute) getAttribute(i), ((Number)getAttributeValue(index, i)).doubleValue()), i);
+				tuple.add(
+						new ContinuousItem((ContinuousAttribute) getAttribute(i), (Double) getAttributeValue(index, i)),
+						i);
 			else
 				tuple.add(new DiscreteItem((DiscreteAttribute) getAttribute(i), (String) getAttributeValue(index, i)),
 						i);
@@ -308,12 +273,9 @@ public class Data {
 	 * Restituisce un array di interi rappresentanti gli indici degli elementi in
 	 * data per le tuple inizialmente scelte come centroidi.
 	 * 
-	 * @param k
-	 *            Indica il numero di cluster da generare.
-	 * @return Array di interi.
-	 * @throws OutOfRangeSampleSize
-	 *             Eccezione sollevata quando si richiede un numero di cluster
-	 *             troppo elevato.
+	 * @param k Indica il numero di cluster da generare.
+	 * @return	Array di interi.
+	 * @throws OutOfRangeSampleSize Eccezione sollevata quando si richiede un numero di cluster troppo elevato.
 	 */
 	public int[] sampling(int k) throws OutOfRangeSampleSize {
 		if (k < 0 || k > getNumberOfExamples()) {
@@ -407,29 +369,11 @@ public class Data {
 		return out;
 	}
 
-	/**
-	 * Calcola la media numerica per il l'attributo corrente nel sottoinsime
-	 * individuato da idList
-	 * 
-	 * @param idList
-	 *            Insieme di indici di data che rappresentano elementi appartenenti
-	 *            ad un cluster.
-	 * @param attribute
-	 *            Attributo discreto rispetto al quale calcolare il
-	 *            prototipo(centroide).
-	 * @return Media dei valori
-	 */
 	private Double computePrototype(Set<Integer> idList, ContinuousAttribute attribute) {
 		Double prototipo = 0.0;
 		Iterator<Integer> it = idList.iterator();
 		while (it.hasNext()) {
-			Integer appoggio = it.next();
-			if (this.getAttributeValue(appoggio, attribute.getIndex()) instanceof Double)
-				prototipo += (Double) this.getAttributeValue(appoggio, attribute.getIndex());
-			else if (this.getAttributeValue(appoggio, attribute.getIndex()) instanceof Float)
-				prototipo += (Float) this.getAttributeValue(appoggio, attribute.getIndex());
-			else
-				prototipo += (Integer) this.getAttributeValue(appoggio, attribute.getIndex());
+			prototipo += (Double) this.getAttributeValue(it.next(), attribute.getIndex());
 		}
 		prototipo = prototipo / idList.size();
 		return prototipo;

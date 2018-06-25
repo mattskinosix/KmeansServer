@@ -60,22 +60,23 @@ public class ServerOneClient extends Thread {
 					break;
 				case 1:
 					int ncluster = (int) in.readObject();
+					System.out.println(ncluster);
+					System.out.println(nometab);
+
 					data= new Data(nometab);
 					kmeans = new KMeansMiner(ncluster);
 					try {
-		//TOGLIERE
 						int numIter = kmeans.kmeans(data);
 						out.writeObject("OK");
 						out.writeObject(kmeans.getC().toString(data));
 					} catch (OutOfRangeSampleSize e) {
-						e.printStackTrace();
 						out.writeObject("Il numero di cluster è troppo elevato!!!!! Prova con un numero più basso");
 					}
 					kmeans.salva(nometab+".dmp");
 					break;
 				case 2:
-					String nomefile=nometab;
-					kmeans.salva(nomefile+".dmp");
+					String nomefile=nometab+".txt";
+					kmeans.salva(nomefile);
 					out.writeObject("OK");
 					break;
 				case 3:
