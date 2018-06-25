@@ -4,34 +4,80 @@ import java.sql.Connection;
 import java.sql.DriverManager;
 import java.sql.SQLException;
 
+/**
+ * 
+ * @author Matteo. CLasse per gestire l'accesso al db attaverso il driver sql ma
+ *         anche la disconnessione e l'inizializzazione del db.
+ */
 public class DbAccess {
+	/**
+	 * Nome della claasse del driver utilizzato per l connessione al db mysql.
+	 */
 	String DRIVER_CLASS_NAME = "org.gjt.mm.mysql.Driver";
+	/**
+	 * Connettore che gestisce accesso e persistenza dei dati per qualisiasi
+	 * programma in java indipendentemente dal dbms.
+	 */
 	final String DBMS = "jdbc:mysql";
-	final String SERVER= "localhost";
+	/**
+	 * Indirizzo ip del server che si desidera utilizzare.
+	 */
+	final String SERVER = "localhost";
+	/**
+	 * Nome del DB che si desidera usare.
+	 */
 	final String DATABASE = "MapDB";
-	final int PORT=3306;
-	final String USER_ID = "MapUser"; //user 
-	final String PASSWORD = "map";	//pass
+	/**
+	 * Porta per la connessione con il server.
+	 */
+	final int PORT = 3306;
+	/**
+	 * Identificatore utente su mysql.
+	 */
+	final String USER_ID = "MapUser"; // user
+	/**
+	 * Password user.
+	 */
+	final String PASSWORD = "map"; // pass
+	/**
+	 * Gestore connessione.
+	 */
 	Connection conn;
-	
-	public void initConnection() throws DatabaseConnectionException{
+
+	/**
+	 * Inizializza la connessione al db caricando il Driver per poter connettere
+	 * attaverso gli attributi definitii precedentemente
+	 * 
+	 * @throws DatabaseConnectionException
+	 *             Eccezione che viene sollevata nel caso si abbiano problemi con il
+	 *             driver o con la stringa di connessione
+	 */
+	public void initConnection() throws DatabaseConnectionException {
 		try {
 			Class.forName(DRIVER_CLASS_NAME);
 		} catch (ClassNotFoundException e) {
 			e.printStackTrace();
 		}
 		try {
-			conn=DriverManager.getConnection(DBMS+"://"+SERVER+":"+PORT+"/"+DATABASE,USER_ID,PASSWORD);
+			conn = DriverManager.getConnection(DBMS + "://" + SERVER + ":" + PORT + "/" + DATABASE, USER_ID, PASSWORD);
 			System.out.println("Connesso al database");
-		} catch ( SQLException e) {
+		} catch (SQLException e) {
 			throw new DatabaseConnectionException();
 		}
 	}
-	
+
+	/**
+	 * Restituisce la connessione creata.
+	 * 
+	 * @return Ritorna la connessione ottenuta precentemente.
+	 */
 	public Connection getConnection() {
 		return conn;
 	}
-	
+
+	/**
+	 * Chiude la connessione con il dbms.
+	 */
 	public void closeConnection() {
 		try {
 			conn.close();

@@ -52,7 +52,7 @@ class ContinuousAttribute extends Attribute {
 	 * @return Restituisce il valore normalizzato.
 	 */
 	public double getScaledValue(double v) {
-		double v1 = (v - min) / (max - min);
+		double v1 = (double) ((v - min) / (max - min));
 		return v1;
 	}
 

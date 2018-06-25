@@ -12,6 +12,7 @@ import java.util.TreeSet;
 
 import database.DatabaseConnectionException;
 import database.DbAccess;
+import database.EmptySetException;
 import database.EmptyTypeException;
 import database.Example;
 import database.QUERY_TYPE;
@@ -46,8 +47,9 @@ public class Data {
 	 * @param tabella
 	 *            Parametro di tipo stringa che indica il nome della tabella del
 	 *            modello relazionale.
+	 * @throws EmptySetException 
 	 */
-	public Data(String tabella) {
+	public Data(String tabella) throws EmptySetException {
 		TreeSet<Example> tempdata = new TreeSet<Example>();
 		DbAccess x = new DbAccess();
 		Connection c;
@@ -68,8 +70,8 @@ public class Data {
 				//System.out.println("tempdata->"+tempdata.size());
 				//System.out.println(tempdata);
 				//c.close();
-			} catch (SQLException | EmptyTypeException e) {
-				e.printStackTrace();
+			} catch (SQLException   e) {
+				e.getMessage();
 			}
 		} catch (DatabaseConnectionException e) {
 			e.printStackTrace();
@@ -96,7 +98,7 @@ public class Data {
 					attributeSet.add(new DiscreteAttribute(schema.getColumn(i).getColumnName(),i,value));
 					System.out.println(value);
 				}else {
-					attributeSet.add(new ContinuousAttribute(schema.getColumn(i).getColumnName(),i,12.5,25.6));
+					attributeSet.add(new ContinuousAttribute(schema.getColumn(i).getColumnName(),i,((Number)x3.getAggregateColumnValue(tabella, schema.getColumn(i), QUERY_TYPE.MIN)).doubleValue(),((Number)x3.getAggregateColumnValue(tabella, schema.getColumn(i), QUERY_TYPE.MAX)).doubleValue()));
 					
 				}
 			}
@@ -252,9 +254,9 @@ public class Data {
 	}
 
 	/**
-	 * 
-	 * @param index
-	 * @return
+	 * Ritorna il valore dell'i-esimo elemento di attributeSet.
+	 * @param index Indice in cui prelevare l'elemento.
+	 * @return Elemento in i-esima posizione di attributeSet.
 	 */
 	public Attribute getAttribute(int index) {
 		return attributeSet.get(index);
@@ -294,7 +296,7 @@ public class Data {
 		for (int i = 0; i < getNumberOfAttributes(); i++) {
 			if (this.getAttribute(i) instanceof ContinuousAttribute)
 				tuple.add(
-						new ContinuousItem((ContinuousAttribute) getAttribute(i), (Double) getAttributeValue(index, i)),
+						new ContinuousItem((ContinuousAttribute) getAttribute(i), ((Number) getAttributeValue(index, i)).doubleValue()),
 						i);
 			else
 				tuple.add(new DiscreteItem((DiscreteAttribute) getAttribute(i), (String) getAttributeValue(index, i)),
@@ -402,12 +404,23 @@ public class Data {
 		}
 		return out;
 	}
-
+	/**
+	 * Calcola la media numerica per il l'attributo corrente nel sottoinsime
+	 * individuato da idList
+	 * 
+	 * @param idList
+	 *            Insieme di indici di data che rappresentano elementi appartenenti
+	 *            ad un cluster.
+	 * @param attribute
+	 *            Attributo discreto rispetto al quale calcolare il
+	 *            prototipo(centroide).
+	 * @return Media dei valori
+	 */
 	private Double computePrototype(Set<Integer> idList, ContinuousAttribute attribute) {
-		Double prototipo = 0.0;
+		Double prototipo = (double) 0;
 		Iterator<Integer> it = idList.iterator();
 		while (it.hasNext()) {
-			prototipo += (Double) this.getAttributeValue(it.next(), attribute.getIndex());
+			prototipo =prototipo + ((Number)this.getAttributeValue(it.next(), attribute.getIndex())).floatValue();
 		}
 		prototipo = prototipo / idList.size();
 		return prototipo;

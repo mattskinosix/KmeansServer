@@ -13,6 +13,7 @@ import data.Data;
 import data.OutOfRangeSampleSize;
 import database.DatabaseConnectionException;
 import database.DbAccess;
+import database.EmptySetException;
 import database.EmptyTypeException;
 import database.TableData;
 import mining.KMeansMiner;
@@ -35,8 +36,8 @@ public class ServerOneClient extends Thread {
 		int scelta = 0;
 		KMeansMiner kmeans = null;
 		Data data = null;
-		while (scelta!=-1) {
-			scelta=-1;
+		while (scelta != -1) {
+			scelta = -1;
 			try {
 				scelta = (int) in.readObject();
 				switch (scelta) {
@@ -52,9 +53,10 @@ public class ServerOneClient extends Thread {
 					try {
 						List table = newTB.getDistinctTransazioni(nometab);
 						out.writeObject("OK");
-					} catch (SQLException | EmptyTypeException e) {
-						e.printStackTrace();
-						out.writeObject("Connessione al database fallita");
+					} catch (SQLException e) {
+						out.writeObject("Nome della tabella nullo o errato");
+					} catch (EmptySetException e) {
+						out.writeObject(e.getMessage());
 					}
 					accessodb.closeConnection();
 					break;
@@ -63,42 +65,50 @@ public class ServerOneClient extends Thread {
 					System.out.println(ncluster);
 					System.out.println(nometab);
 
-					data= new Data(nometab);
-					kmeans = new KMeansMiner(ncluster);
 					try {
-		//TOGLIERE
-						int numIter = kmeans.kmeans(data);
-						out.writeObject("OK");
-						out.writeObject(kmeans.getC().toString(data));
-					} catch (OutOfRangeSampleSize e) {
-						e.printStackTrace();
-						out.writeObject("Il numero di cluster è troppo elevato!!!!! Prova con un numero più basso");
+						data = new Data(nometab);
+
+						kmeans = new KMeansMiner(ncluster);
+						try {
+							// TOGLIERE
+							int numIter = kmeans.kmeans(data);
+							out.writeObject("OK");
+							out.writeObject(kmeans.getC().toString(data));
+							kmeans.salva(nometab + ".dmp");
+						} catch (OutOfRangeSampleSize e) {
+							out.writeObject(e.getMessage());
+						}
+					} catch (EmptySetException e) {
+						out.writeObject(e.getMessage());
 					}
-					kmeans.salva(nometab+".dmp");
+
 					break;
 				case 2:
-					String nomefile=nometab+".txt";
+					String nomefile = nometab + ".txt";
 					kmeans.salva(nomefile);
 					out.writeObject("OK");
 					break;
 				case 3:
-					nomefile =(String)in.readObject();
-					
-			        data=new Data(nomefile);
-			        
-			        try {
-			        	kmeans=new KMeansMiner(nomefile+".dmp");
-			        	out.writeObject("OK");
-						out.writeObject(kmeans.getC().toString(data));
-			        }catch(FileNotFoundException e) {
-			        	out.writeObject("File non trovato");
-			        }
+					nomefile = (String) in.readObject();
+					try {
+						data = new Data(nomefile);
+
+						try {
+							kmeans = new KMeansMiner(nomefile + ".dmp");
+							out.writeObject("OK");
+							out.writeObject(kmeans.getC().toString(data));
+						} catch (FileNotFoundException e) {
+							out.writeObject("File non trovato");
+						}
+					} catch (EmptySetException e) {
+						out.writeObject(e.getMessage());
+					}
 					break;
 				}
 			} catch (IOException | ClassNotFoundException e) {
 				e.printStackTrace();
 			}
-			
+
 		}
-}
+	}
 }

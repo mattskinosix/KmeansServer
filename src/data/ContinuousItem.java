@@ -10,8 +10,8 @@ public class ContinuousItem extends Item {
 	@Override
 	public double distance(Object a) {
 		double out = 0;
-		out = (Math.abs(((ContinuousAttribute) getAttribute()).getScaledValue((Double) (getValue()))
-				- ((ContinuousAttribute) getAttribute()).getScaledValue((Double) a)));
+		out = (Math.abs(((ContinuousAttribute) getAttribute()).getScaledValue(((Number) (getValue())).floatValue())
+				- ((ContinuousAttribute) getAttribute()).getScaledValue(((Number) a).floatValue())));
 		return out;
 	}
 
