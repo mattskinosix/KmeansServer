@@ -1,12 +1,11 @@
 package data;
-
 import java.io.Serializable;
 
 /**
- * @author Mirko. Classe astratta che modella la entità attributo. *
+ * @author Mirko. Classe astratta che modella la entità attributo. 
  */
 @SuppressWarnings("serial")
-public abstract class Attribute implements Serializable {
+abstract class Attribute implements Serializable {
 	/**
 	 * Nome simbolico dell'attributo.
 	 */
@@ -24,7 +23,7 @@ public abstract class Attribute implements Serializable {
 	 * @param index
 	 *            Indica l'identificativo da assegnare.
 	 */
-	public Attribute(String name, int index) {
+	 Attribute(String name, int index) {
 
 		this.name = name;
 		this.index = index;
@@ -35,7 +34,7 @@ public abstract class Attribute implements Serializable {
 	 * 
 	 * @return name.
 	 */
-	public String getName() {
+	 String getName() {
 		return name;
 	}
 
@@ -44,7 +43,7 @@ public abstract class Attribute implements Serializable {
 	 * 
 	 * @return index.
 	 */
-	public int getIndex() {
+	 int getIndex() {
 		return index;
 	}
 

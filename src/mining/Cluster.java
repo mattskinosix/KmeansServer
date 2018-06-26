@@ -12,7 +12,7 @@ import data.*;
  *
  */
 @SuppressWarnings("serial")
-public class Cluster implements Serializable {
+ class Cluster implements Serializable {
 	/**
 	 * Oggetto di tipo tuple.
 	 */
@@ -98,7 +98,6 @@ public class Cluster implements Serializable {
 	 * rappresentante lo stato dell'oggetto.
 	 */
 	public String toString() {
-		System.out.println("aaa");
 		String str = "Centroid=(";
 		for (int i = 0; i < centroid.getLength(); i++)
 			str += centroid.get(i);
@@ -116,7 +115,7 @@ public class Cluster implements Serializable {
 	 *            restituire.
 	 * @return Restituisce la stringa creata.
 	 */
-	public String toString(Data data) {
+	 String toString(Data data) {
 		String str = "Centroid=(";
 		for (int i = 0; i < centroid.getLength(); i++)
 			str += centroid.get(i) + " ";

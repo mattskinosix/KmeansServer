@@ -21,7 +21,7 @@ public class Example implements Comparable<Example> {
 	 * @param o
 	 *            Oggetto da aggiungere alla lista.
 	 */
-	public void add(Object o) {
+	 void add(Object o) {
 		example.add(o);
 	}
 
@@ -45,6 +45,7 @@ public class Example implements Comparable<Example> {
 	 * @return Restituisce 0 se sono uguali 1 se sono diversi piu grande -1 se piu
 	 *         piccolo.
 	 */
+	@SuppressWarnings({ "rawtypes", "unchecked" })
 	public int compareTo(Example ex) {
 
 		int i = 0;

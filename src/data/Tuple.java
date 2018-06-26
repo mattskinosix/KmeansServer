@@ -53,7 +53,7 @@ public class Tuple implements Serializable {
 	 * @param i
 	 *            Indice che rappresenta la posizione in cui salvarlo.
 	 */
-	public void add(Item c, int i) {
+	void add(Item c, int i) {
 		tuple[i] = c;
 	}
 

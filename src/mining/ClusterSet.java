@@ -20,11 +20,11 @@ public class ClusterSet implements Serializable {
 	/**
 	 * Array di oggetti di tipo Cluster.
 	 */
-	Cluster[] C;
+	private Cluster[] C;
 	/**
 	 * Posizione valida per la memorizzazione di un nuovo cluster in C.
 	 */
-	int i = 0;
+	private int i = 0;
 
 	/**
 	 * Sovrascrive metodo ereditato dalla superclasse e restituisce la stringa
@@ -51,7 +51,7 @@ public class ClusterSet implements Serializable {
 	 * @param k
 	 *            Numero di cluster da generare.
 	 */
-	public ClusterSet(int k) {
+	ClusterSet(int k) {
 		C = new Cluster[k];
 	}
 
@@ -61,7 +61,7 @@ public class ClusterSet implements Serializable {
 	 * @param c
 	 *            Oggetto di tipo Cluster da dover aggiungere.
 	 */
-	public void add(Cluster c) {
+	private void add(Cluster c) {
 		C[i] = c;
 		i++;
 	}
@@ -73,7 +73,7 @@ public class ClusterSet implements Serializable {
 	 *            Indica la posizione del cluster da resituire.
 	 * @return Oggetto di tipo Cluster.
 	 */
-	public Cluster get(int i) {
+	private Cluster get(int i) {
 		return C[i];
 	}
 
@@ -86,7 +86,7 @@ public class ClusterSet implements Serializable {
 	 *             Eccezzione sollevata se si richiedono un numero di centroidi
 	 *             troppo elevato.
 	 */
-	public void initializeCentroids(Data data) throws OutOfRangeSampleSize {
+	void initializeCentroids(Data data) throws OutOfRangeSampleSize {
 		int centroidIndexes[] = data.sampling(C.length);
 		for (int i = 0; i < centroidIndexes.length; i++) {
 			Tuple centroidI = data.getItemSet(centroidIndexes[i]);
@@ -102,7 +102,7 @@ public class ClusterSet implements Serializable {
 	 *            Riferimento ad un oggetto di tipo Tuple.
 	 * @return Restituisce il cluster piu' vicino alla tupla passata.
 	 */
-	public Cluster nearestCluster(Tuple tuple) {
+	Cluster nearestCluster(Tuple tuple) {
 		double min = Double.POSITIVE_INFINITY;// errore get cntroid la posizione 0 risulta nulla
 		int j = 0, indice = -1;
 		while (j < C.length) {
@@ -125,7 +125,7 @@ public class ClusterSet implements Serializable {
 	 *            Indice della posizione di Data.
 	 * @return Restituisce il cluster a cui la tupla fa riferimento oppure null.
 	 */
-	public Cluster currentCluster(int id) {
+	Cluster currentCluster(int id) {
 		int i = 0;
 		int indice = -1;
 		while (i < C.length) {
@@ -145,7 +145,7 @@ public class ClusterSet implements Serializable {
 	 * @param data
 	 *            Oggetto di tipo Data.
 	 */
-	public void updateCentroids(Data data) {
+	void updateCentroids(Data data) {
 		int j = 0;
 		while (j < C.length) {
 			get(j).computeCentroid(data);

@@ -18,7 +18,7 @@ public abstract class Item implements Serializable {
 	/**
 	 * Valore assegnato all'attributo.
 	 */
-	Object value;
+	private Object value;
 
 	/**
 	 * Costruttore,inizializza i valori dei membri attributi.
@@ -28,7 +28,7 @@ public abstract class Item implements Serializable {
 	 * @param value
 	 *            Valore da assegnare all'attributo.
 	 */
-	public Item(Attribute attribute, Object value) {
+	Item(Attribute attribute, Object value) {
 		this.attribute = attribute;
 		this.value = value;
 	}
@@ -38,7 +38,7 @@ public abstract class Item implements Serializable {
 	 * 
 	 * @return attribute.
 	 */
-	public Attribute getAttribute() {
+	Attribute getAttribute() {
 		return attribute;
 	}
 
@@ -47,7 +47,7 @@ public abstract class Item implements Serializable {
 	 * 
 	 * @return value.
 	 */
-	public Object getValue() {
+	Object getValue() {
 		return value;
 	}
 
@@ -69,7 +69,7 @@ public abstract class Item implements Serializable {
 	 *            Oggetto che può rappresentare un attributo continuo o discreto.
 	 * @return Restituisce la distanza calcolata.
 	 */
-	public abstract double distance(Object a);
+	abstract double distance(Object a);
 
 	/**
 	 * Modifica il membro value, assegnandoli il valore restituito da

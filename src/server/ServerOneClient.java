@@ -21,7 +21,7 @@ import mining.KMeansMiner;
  *         per ogni richiesta ricevuta dal client.
  *
  */
-public class ServerOneClient extends Thread {
+class ServerOneClient extends Thread {
 	/**
 	 * Oggetto di tipo Socket, utile per creare la connessione.
 	 */
@@ -29,11 +29,11 @@ public class ServerOneClient extends Thread {
 	/**
 	 * Oggetti che indicano dei flussi provenienti dal client.
 	 */
-	ObjectInputStream in;
+	private ObjectInputStream in;
 	/**
 	 * Oggetti che indicano dei flussi in uscita dal server.
 	 */
-	ObjectOutputStream out;
+	private ObjectOutputStream out;
 	/**
 	 * Oggetto di tipo KMeanMiner utile per rispondere alle richieste.
 	 */
@@ -49,7 +49,7 @@ public class ServerOneClient extends Thread {
 	 *             Eccezzione sollevata per problemi riscontrati
 	 *             nell'inizializzazione di in e out.
 	 */
-	public ServerOneClient(Socket s) throws IOException {
+	ServerOneClient(Socket s) throws IOException {
 		socket = s;
 		in = new ObjectInputStream(s.getInputStream());
 		out = new ObjectOutputStream(s.getOutputStream());
@@ -65,9 +65,9 @@ public class ServerOneClient extends Thread {
 		int scelta = 0;
 		KMeansMiner kmeans = null;
 		Data data = null;
-		while (scelta != -1) {
-			scelta = -1;
-			try {
+		try {
+			while (scelta != -1) {
+				scelta = -1;
 				scelta = (int) in.readObject();
 				switch (scelta) {
 				case 0: // storeTableFromDb
@@ -92,9 +92,6 @@ public class ServerOneClient extends Thread {
 					break;
 				case 1:
 					int ncluster = (int) in.readObject();
-					System.out.println(ncluster);
-					System.out.println(nometab);
-
 					try {
 						data = new Data(nometab);
 
@@ -139,10 +136,14 @@ public class ServerOneClient extends Thread {
 					}
 					break;
 				}
-			} catch (IOException | ClassNotFoundException e) {
-				e.printStackTrace();
 			}
-
+		} catch (IOException | ClassNotFoundException e) {
+		} finally {
+			try {
+				socket.close();
+			} catch (IOException e) {
+			}
 		}
+
 	}
 }

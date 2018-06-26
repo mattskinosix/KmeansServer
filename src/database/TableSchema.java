@@ -43,7 +43,7 @@ public class TableSchema {
 		 * @param type
 		 *            Tipo dell'oggetto colonna.
 		 */
-		Column(String name, String type) {
+		private Column(String name, String type) {
 			this.name = name;
 			this.type = type;
 		}
@@ -80,7 +80,7 @@ public class TableSchema {
 	/**
 	 * Lista di oggetti di tipo colonna rappresentante una tabella.
 	 */
-	List<Column> tableSchema = new ArrayList<Column>();
+	private List<Column> tableSchema = new ArrayList<Column>();
 
 	/**
 	 * Costruttore per il riempimento della Lista di colonne e quindi per la

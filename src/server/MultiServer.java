@@ -11,7 +11,7 @@ import java.net.Socket;
  * @author Mirko.
  *
  */
-public class MultiServer {
+class MultiServer {
 	static int PORT = 8084;
 
 	/**
@@ -21,7 +21,7 @@ public class MultiServer {
 	 * @param port
 	 *            Indica la porta per inizializzare una serversocket.
 	 */
-	MultiServer(int port) {
+	private MultiServer(int port) {
 		PORT = port;
 		run();
 	}
@@ -31,26 +31,23 @@ public class MultiServer {
 	 * ogni richiesta instanziare un oggetto della classe ServerOneClient. Se non
 	 * riceve richieste, rimane in attesa.
 	 */
-	public void run() {
+	private void run() {
 		ServerSocket s = null;
 		try {
 			s = new ServerSocket(PORT);
 			System.out.println("Server partito");
 			while (true) {
-				System.out.println("attesa");
+				System.out.println("Attesa");
 				Socket socket = s.accept();
 				System.out.println("Connessione avvenuta");
 				try {
 					new ServerOneClient(socket);
-					;
-					System.out.println("dopo");
 				} catch (IOException e) {
 					socket.close();
 				}
 			}
 		} catch (IOException e) {
 			e.printStackTrace();
-		} finally {
 		}
 		try {
 			s.close();
@@ -65,6 +62,6 @@ public class MultiServer {
 	 * @param args
 	 */
 	public static void main(String[] args) {
-		MultiServer newMS = new MultiServer(PORT);
+		new MultiServer(PORT);
 	}
 }

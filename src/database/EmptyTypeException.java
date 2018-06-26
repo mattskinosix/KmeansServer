@@ -13,6 +13,6 @@ public class EmptyTypeException extends Exception {
 	 * stringa.
 	 */
 	EmptyTypeException() {
-		System.out.println("Risultato della query risulta essere vuoto");
+		super("Risultato della query risulta essere vuoto");
 	}
 }

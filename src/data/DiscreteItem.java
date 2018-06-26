@@ -7,7 +7,8 @@ package data;
  * @author mirko
  *
  */
-public class DiscreteItem extends Item {
+@SuppressWarnings("serial")
+class DiscreteItem extends Item {
 	/**
 	 * Invoca il costruttore della classe madre.
 	 * 
@@ -16,7 +17,7 @@ public class DiscreteItem extends Item {
 	 * @param value
 	 *            Valore da assegnare all'attributo.
 	 */
-	public DiscreteItem(DiscreteAttribute attribute, String value) {
+	 DiscreteItem(DiscreteAttribute attribute, String value) {
 		super(attribute, value);
 	}
 
@@ -28,7 +29,7 @@ public class DiscreteItem extends Item {
 	 *            Riferimento ad un oggetto di tipo Object su cui fare il confronto.
 	 * @return Restituisce 0 o 1.
 	 */
-	public double distance(Object a) {
+	 double distance(Object a) {
 		if (getValue().equals(a))
 			return 0;
 		else

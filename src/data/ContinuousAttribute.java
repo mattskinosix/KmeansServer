@@ -37,7 +37,7 @@ class ContinuousAttribute extends Attribute {
 	 * @param max
 	 *            Valore massimo del dominio di valori che può assumere l'attributo.
 	 */
-	public ContinuousAttribute(String name, int index, double min, double max) {
+	 ContinuousAttribute(String name, int index, double min, double max) {
 		super(name, index);
 		this.max = max;
 		this.min = min;
@@ -51,7 +51,7 @@ class ContinuousAttribute extends Attribute {
 	 *            Valore dell'attributo da normalizzare.
 	 * @return Restituisce il valore normalizzato.
 	 */
-	public double getScaledValue(double v) {
+	 double getScaledValue(double v) {
 		double v1 = (double) ((v - min) / (max - min));
 		return v1;
 	}

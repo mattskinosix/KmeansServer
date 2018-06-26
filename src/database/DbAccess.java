@@ -60,7 +60,6 @@ public class DbAccess {
 		}
 		try {
 			conn = DriverManager.getConnection(DBMS + "://" + SERVER + ":" + PORT + "/" + DATABASE, USER_ID, PASSWORD);
-			System.out.println("Connesso al database");
 		} catch (SQLException e) {
 			throw new DatabaseConnectionException();
 		}

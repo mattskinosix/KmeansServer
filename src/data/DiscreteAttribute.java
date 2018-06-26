@@ -11,6 +11,7 @@ import java.util.TreeSet;
  * @author Mirko
  *
  */
+@SuppressWarnings("serial")
 class DiscreteAttribute extends Attribute implements Iterable<String> {
 	/**
 	 * Albero di oggetti String, uno per ciascun valore del dominio discreto. I
@@ -47,7 +48,7 @@ class DiscreteAttribute extends Attribute implements Iterable<String> {
 	 * 
 	 * @return Numero di valori discreti nel dominio dell'attributo.
 	 */
-	public int getNumberOfDistinctValues() {
+	 int getNumberOfDistinctValues() {
 		return values.size();
 	}
 
@@ -64,7 +65,7 @@ class DiscreteAttribute extends Attribute implements Iterable<String> {
 	 * @param v Valore discreto.
 	 * @return Numero di occorrenze del valore discreto.
 	 */
-	public int frequency(Data data, Set<Integer> idList, String v) {
+	 int frequency(Data data, Set<Integer> idList, String v) {
 		int i = 0, j = 0;
 		int freq = 0;
 		while (i < data.getNumberOfExamples()) {

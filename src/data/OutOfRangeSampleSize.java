@@ -5,6 +5,7 @@ package data;
  * elevata rispetto alla tabella data
  * 
  */
+@SuppressWarnings("serial")
 public class OutOfRangeSampleSize extends Exception {
 	/**
 	 * Costruttore che permette di richiamare il costruttore della superclasse
