@@ -13,32 +13,32 @@ public class DbAccess {
 	/**
 	 * Nome della claasse del driver utilizzato per l connessione al db mysql.
 	 */
-	String DRIVER_CLASS_NAME = "org.gjt.mm.mysql.Driver";
+	private String DRIVER_CLASS_NAME = "org.gjt.mm.mysql.Driver";
 	/**
 	 * Connettore che gestisce accesso e persistenza dei dati per qualisiasi
 	 * programma in java indipendentemente dal dbms.
 	 */
-	final String DBMS = "jdbc:mysql";
+	private final String DBMS = "jdbc:mysql";
 	/**
 	 * Indirizzo ip del server che si desidera utilizzare.
 	 */
-	final String SERVER = "localhost";
+	private final String SERVER = "localhost";
 	/**
 	 * Nome del DB che si desidera usare.
 	 */
-	final String DATABASE = "MapDB";
+	private final String DATABASE = "MapDB";
 	/**
 	 * Porta per la connessione con il server.
 	 */
-	final int PORT = 3306;
+	private final int PORT = 3306;
 	/**
 	 * Identificatore utente su mysql.
 	 */
-	final String USER_ID = "MapUser"; // user
+	private final String USER_ID = "MapUser"; // user
 	/**
 	 * Password user.
 	 */
-	final String PASSWORD = "map"; // pass
+	private final String PASSWORD = "map"; // pass
 	/**
 	 * Gestore connessione.
 	 */
